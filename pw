@@ -1,0 +1,72 @@
+#!/bin/sh
+
+die() {
+    status="$1"
+    shift
+    warn $@
+    exit "$status"
+}
+
+warn() {
+    echo $@ 1>&2
+}
+
+USAGE="$0 [-u] [-url] REGEX"
+safe="$HOME/mysafe.txt"
+
+f_Group_Title=1
+f_Username=2
+f_Password=3
+f_URL=4
+f_AutoType=5
+f_Created_Time=6
+f_Password_Modified_Time=7
+f_Last_Access_Time=8
+f_Password_Expiry_Date=9
+f_Password_Expiry_Interval=10
+f_Record_Modified_Time=11
+f_Password_Policy=12
+f_Password_Policy_Name=13
+f_History=14
+f_Run_Command=15
+f_DCA=16
+f_Shift_DCA=17
+f_e_mail=18
+f_Protected=19
+f_Symbols=20
+f_Notes=21
+
+field=$f_Password
+grep_ignore_case="-i"
+
+while [ $# -gt 0 ]; do
+    case "$1" in 
+      -u)
+        field=$f_Username
+        shift
+        ;; 
+      --url)
+        field=$f_URL
+        shift
+        ;;
+      --case-sensitive)
+        grep_ignore_case=""
+        shift
+        ;;
+      -*)
+        die 1 "unknown flag $1 - $USAGE"
+        shift
+        break
+        ;;
+      *)
+        break
+        ;;
+    esac
+done
+
+test $# -eq 0 && die 1 "no request! - $USAGE"
+test -f "$safe" || die 1 "$safe is not a regular file"
+
+grep $grep_ignore_case "$@" "$safe" |\
+awk -F'	' '{print $'$field'}'
+
