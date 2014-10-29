@@ -20,6 +20,20 @@ make_safedir_config() {
     add_safedir
 }
 
+my_dialog() {
+    dialog --title "Password selector" \
+    --menu "pick a site for a password" \
+    20 51 12 \
+    foo bar \
+    baz quz \
+    thing one \
+    thing2 two \
+    2> foo
+
+    retval=$?
+    cat foo
+}
+
 USAGE="$0 [-u] [-url]"
 
 config="$HOME/.config/pw"
@@ -97,6 +111,8 @@ test $# -eq 1 && request="$1"
 #{ while [ read <$safedir_config ]; do
 #    grep -v -h '^#' "$REPLY/"*
 #done } |\
+
+my_dialog
 
 grep -v -h '^#' "$safedirs/"* |\
 grep $ignore_case $request |\
