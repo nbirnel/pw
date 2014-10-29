@@ -3,7 +3,7 @@
 die() {
     status="$1"
     shift
-    warn $@
+    warn "$0: $@"
     exit "$status"
 }
 
@@ -11,8 +11,27 @@ warn() {
     echo $@ 1>&2
 }
 
-USAGE="$0 [-u] [-url] REGEX"
-safe="$HOME/mysafe.txt"
+add_safedir() {
+    $EDITOR "$safedir_config"
+}
+
+make_safedir_config() {
+    echo '# put full paths to safe directories here' >"$safedir_config"
+    add_safedir
+}
+
+USAGE="$0 [-u] [-url]"
+
+config="$HOME/.config/pw"
+test -d "$config" || mkdir -p "$config" || die 1 "Can't make $config"
+
+safedir_config="$config/safedir"
+
+while [ ! -f "$safedir_config" ]; do
+    make_safedir_config
+done
+
+safedirs="$(grep -v '^#' "$safedir_config")"
 
 f_Group_Title=1
 f_Username=2
@@ -37,11 +56,13 @@ f_Symbols=20
 f_Notes=21
 
 field=$f_Password
-grep_ignore_case="-i"
+ignore_case="-i"
+dmenu_args="-l 45"
+clipboard="xclip -i"
 
 while [ $# -gt 0 ]; do
     case "$1" in 
-      -u)
+      --user)
         field=$f_Username
         shift
         ;; 
@@ -49,8 +70,12 @@ while [ $# -gt 0 ]; do
         field=$f_URL
         shift
         ;;
+      --add-safedir)
+        add_safedir
+        exit
+        ;;
       --case-sensitive)
-        grep_ignore_case=""
+        ignore_case=""
         shift
         ;;
       -*)
@@ -64,9 +89,18 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-test $# -eq 0 && die 1 "no request! - $USAGE"
-test -f "$safe" || die 1 "$safe is not a regular file"
+picker="dmenu $ignore_case $dmenu_args"
 
-grep $grep_ignore_case "$@" "$safe" |\
-awk -F'	' '{print $'$field'}'
+request='.'
+test $# -eq 1 && request="$1"
+
+#{ while [ read <$safedir_config ]; do
+#    grep -v -h '^#' "$REPLY/"*
+#done } |\
+
+grep -v -h '^#' "$safedirs/"* |\
+grep $ignore_case $request |\
+$picker |\
+awk -F'	' '{print $'$field'}' |\
+$clipboard
 
