@@ -1,0 +1,39 @@
+.# vim: ft=nroff
+.TH pw 1 pw\-__0.0.1
+.SH NAME
+pw \- simple password manager
+.SH SYNOPSIS
+.B pw [OPTIONS] [REGEX]
+.SH DESCRIPTION
+.B pw
+opens a menu of passwords,
+and puts the selected one in the clipboard.
+It currently does not encrypt the password file.
+.SH OPTIONS
+.TP 5
+--help 
+Print a brief usage message.
+.TP 5
+--user
+Get the user name instead of the password.
+.SH EXAMPLES
+.LP
+.B pw --user
+
+.SH EXIT STATUS
+exits non-zero on error.
+.SH AUTHOR
+Noah Birnel
+.SH HISTORY
+.SH FILES
+$HOME/.config/pw/
+.SH BUGS
+Probably.
+.SH SEE ALSO
+.TP
+.BR dmenu(1)
+.SH LICENSE
+Copyright 2014 Noah Birnel
+.sp
+DWTFYW
+

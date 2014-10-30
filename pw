@@ -112,7 +112,7 @@ test $# -eq 1 && request="$1"
 #    grep -v -h '^#' "$REPLY/"*
 #done } |\
 
-my_dialog
+#my_dialog
 
 grep -v -h '^#' "$safedirs/"* |\
 grep $ignore_case $request |\
