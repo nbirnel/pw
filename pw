@@ -150,6 +150,6 @@ done
 grep -v -h '^#' "$safedirs/"* |\
 grep $ignore_case $request |\
 picker |\
-awk -F'	' '{print $'$field'}' |\
+cut -f $field |\
 $clipboard
 
