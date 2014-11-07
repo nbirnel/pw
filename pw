@@ -11,13 +11,17 @@ warn() {
     echo $@ 1>&2
 }
 
-add_safedir() {
+edit_safedirs() {
     $EDITOR "$safedir_config"
+}
+
+help() {
+    echo $USAGE
 }
 
 make_safedir_config() {
     echo '# put full paths to safe directories here' >"$safedir_config"
-    add_safedir
+    edit_safedirs
 }
 
 picker() {
@@ -38,7 +42,7 @@ my_dialog() {
     cat foo
 }
 
-USAGE="$0 [-u] [-url]"
+USAGE="$0 [OPTIONS] [REGEX]"
 
 config="$HOME/.config/pw"
 test -d "$config" || mkdir -p "$config" || die 1 "Can't make $config"
@@ -83,6 +87,10 @@ clipboard="xclip -i"
 
 while [ $# -gt 0 ]; do
     case "$1" in 
+      --help)
+        help
+        exit
+        ;; 
       --user)
         field=$f_Username
         shift
@@ -91,9 +99,9 @@ while [ $# -gt 0 ]; do
         field=$f_URL
         shift
         ;;
-      --add-safedir)
-        add_safedir
-        exit
+      --edit-safedirs)
+        edit_safedirs
+        exit $?
         ;;
       --case-sensitive)
         ignore_case=""
