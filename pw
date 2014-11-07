@@ -20,6 +20,10 @@ make_safedir_config() {
     add_safedir
 }
 
+picker() {
+    dmenu $ignore_case $dmenu_args -fn "$font"
+}
+
 my_dialog() {
     dialog --title "Password selector" \
     --menu "pick a site for a password" \
@@ -71,7 +75,10 @@ f_Notes=21
 
 field=$f_Password
 ignore_case="-i"
-dmenu_args="-l 45"
+font='-*-dejavu sans-medium-r-'
+lines='45'
+dmenu_args="-l $lines"
+
 clipboard="xclip -i"
 
 while [ $# -gt 0 ]; do
@@ -103,8 +110,6 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-picker="dmenu $ignore_case $dmenu_args"
-
 request='.'
 test $# -eq 1 && request="$1"
 
@@ -116,7 +121,7 @@ test $# -eq 1 && request="$1"
 
 grep -v -h '^#' "$safedirs/"* |\
 grep $ignore_case $request |\
-$picker |\
+picker |\
 awk -F'	' '{print $'$field'}' |\
 $clipboard
 
