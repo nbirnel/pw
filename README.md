@@ -20,6 +20,7 @@
 <a href="#HISTORY">HISTORY</a><br>
 <a href="#FILES">FILES</a><br>
 <a href="#BUGS">BUGS</a><br>
+<a href="#DEPENDANCIES">DEPENDANCIES</a><br>
 <a href="#SEE ALSO">SEE ALSO</a><br>
 <a href="#LICENSE">LICENSE</a><br>
 
@@ -101,14 +102,29 @@ on error.</p>
 
 
 
-<p style="margin-left:11%; margin-top: 1em">$HOME/.config/pw/</p>
+<p style="margin-left:11%; margin-top: 1em"><b>$HOME/.config/pw/safedir</b>
+Where the location of the safes is stored.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>[safes]</b>
+The safes, which are tab delimited, based on the
+PasswordSafe export format.</p>
 
 <h2>BUGS
 <a name="BUGS"></a>
 </h2>
 
 
-<p style="margin-left:11%; margin-top: 1em">Probably.</p>
+<p style="margin-left:11%; margin-top: 1em">Can only read
+one safes directory. Requires X to be running. Safes are not
+encrypted. Probably others.</p>
+
+<h2>DEPENDANCIES
+<a name="DEPENDANCIES"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>http://dl.suckless.org/tools/dmenu-4.5.tar.gz</i></p>
 
 <h2>SEE ALSO
 <a name="SEE ALSO"></a>
@@ -116,7 +132,7 @@ on error.</p>
 
 
 
-<p style="margin-left:11%; margin-top: 1em"><b>dmenu(1)</b></p>
+<p style="margin-left:11%; margin-top: 1em"><i><b>dmenu(1)</b></i></p>
 
 <h2>LICENSE
 <a name="LICENSE"></a>

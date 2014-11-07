@@ -19,13 +19,28 @@ help() {
     echo $USAGE
 }
 
+picker() {
+    dmenu $ignore_case $dmenu_args -fn "$font"
+}
+
 make_safedir_config() {
+    old_umask=$(umask)
+    umask 0077
     echo '# put full paths to safe directories here' >"$safedir_config"
+    umask $old_umask
     edit_safedirs
 }
 
-picker() {
-    dmenu $ignore_case $dmenu_args -fn "$font"
+make_config() {
+    old_umask=$(umask)
+    umask 0077
+    mkdir -p "$config" || die 1 "Can't make $config"
+    umask $old_umask
+}
+
+require_private() {
+    ls -ld "$1" | awk '{print $1}' | grep -e '------$' >/dev/null \
+    || die 1 "$1 should be not be readable or writable by others"
 }
 
 my_dialog() {
@@ -45,13 +60,14 @@ my_dialog() {
 USAGE="$0 [OPTIONS] [REGEX]"
 
 config="$HOME/.config/pw"
-test -d "$config" || mkdir -p "$config" || die 1 "Can't make $config"
+test -d "$config" || make_config
 
 safedir_config="$config/safedir"
 
 while [ ! -f "$safedir_config" ]; do
     make_safedir_config
 done
+require_private "$safedir_config"
 
 safedirs="$(grep -v '^#' "$safedir_config")"
 
@@ -126,6 +142,10 @@ test $# -eq 1 && request="$1"
 #done } |\
 
 #my_dialog
+
+for i in "$config" "$safedir_config" "$safedirs" "$safedirs/"*; do
+    require_private "$i"
+done
 
 grep -v -h '^#' "$safedirs/"* |\
 grep $ignore_case $request |\

@@ -34,9 +34,21 @@ exits non-zero on error.
 Noah Birnel
 .SH HISTORY
 .SH FILES
-$HOME/.config/pw/
+.LP
+.B $HOME/.config/pw/safedir
+Where the location of the safes is stored.
+.LP
+.B [safes]
+The safes,
+which are tab delimited,
+based on the PasswordSafe export format.
 .SH BUGS
-Probably.
+Can only read one safes directory. 
+Requires X to be running.
+Safes are not encrypted.
+Probably others.
+.SH DEPENDANCIES
+.IR http://dl.suckless.org/tools/dmenu-4.5.tar.gz
 .SH SEE ALSO
 .TP
 .BR dmenu(1)
